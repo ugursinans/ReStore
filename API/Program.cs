@@ -19,14 +19,15 @@ namespace API
         {
             var host = CreateHostBuilder(args).Build();
             using var scope = host.Services.CreateScope();
+            //server çalışmadan önce servislerimizi kullanacağız.
             var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
             try
             {
-                //servis çalışmadan önce StoreContext ile db yi oluşturuyoruz. dotnet ef migrate işlemini yapar. Belki de eski sürümlerde böyle yapılırdı.
+                //server çalışmadan önce StoreContext ile db yi oluşturuyoruz. dotnet ef migrate işlemini yapar. Belki de eski sürümlerde böyle yapılırdı.
                 context.Database.Migrate();
-                //servis çalışmadan önce rasgele(DbInitializer) bir sınıfla db de veri yoksa veri ekleme işlemi yapıyoruz.İsmi ahmet bile olabilir.
+                //server çalışmadan önce rasgele(DbInitializer) bir sınıfla db de veri yoksa veri ekleme işlemi yapıyoruz.İsmi ahmet bile olabilir.
                 DbInitializer.Initialize(context);
             }
             catch (System.Exception ex)
